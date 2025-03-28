@@ -1,0 +1,854 @@
+.page {
+    position: relative;
+    width: 210mm;
+    /* A4 */
+    min-height: 297mm;
+    /* A4 */
+    margin: 20px auto;
+    background: #fff;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    page-break-after: always;
+    padding: 0;
+    border: 1px solid black;
+    /* Borde delgado de color negro */
+}
+
+/* Página 1 con barra izquierda */
+.page1 .left-column {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 48mm;
+    height: 100%;
+    background: #071e3b;
+    /* padding: 20px; */
+    text-align: center;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+
+.page1 .left-column img {
+    max-width: 50%;
+    height: auto;
+    margin-bottom: 35px;
+}
+
+.page1 .left-column p {
+    color: #fff;
+    font-size: 0.7em;
+    margin-top: 750px;
+    line-height: 1.3em;
+    text-align: center;
+    /* Centrado del texto */
+    padding-bottom: 10px;
+    /* Espacio entre el texto y la línea */
+    position: relative;
+    /* Necesario para colocar el pseudo-elemento */
+}
+
+.page1 .left-column p::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 3px;
+    /* Altura de la línea */
+    background: linear-gradient(to right, #021d92, #ff0800, #f10000);
+    /* Degradado */
+}
+
+.page1 .right-column {
+    margin-left: 48mm;
+    padding: 30px 20px;
+}
+
+/* Páginas 2 y 3 (ancho completo) */
+.full-content {
+    width: 100%;
+    padding: 30px 20px;
+}
+
+.page1-content p,
+.page2-content p,
+.page3-content p {
+    text-align: justify;
+    font-family: Arial, Helvetica, sans-serif;
+    margin-bottom: 10px;
+}
+
+.page2-content table,
+.page3-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0;
+}
+
+.page3-content table,
+.page3-content th,
+.page3-content td {
+    border: 1px solid #000;
+}
+
+.page3-content th,
+.page3-content td {
+    padding: 5px;
+    text-align: left;
+    vertical-align: top;
+}
+
+.data-field {
+    font-weight: bold;
+    color: #000;
+}
+
+/* IMPRESIÓN: Se ocultan formulario, botones y historial */
+@media print {
+
+    .form-container,
+    .action-container,
+    .history-container {
+        display: none !important;
+    }
+
+    body {
+        background: #fff;
+    }
+
+    * {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+}
+
+.history-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+@media print {
+
+    /* RESTAURAR BORDES DE TABLAS */
+    table {
+        border: 1px solid #000 !important;
+        border-collapse: collapse !important;
+        width: 100% !important;
+    }
+
+    th,
+    td {
+        border: 1px solid #000 !important;
+        padding: 8px !important;
+        text-align: left !important;
+    }
+
+    /* AJUSTES FINALES DE DISEÑO */
+    .page {
+        margin: 0 auto !important;
+        border: none !important;
+    }
+
+    @page {
+        margin: 1cm;
+    }
+
+    /* OCULTAR BOTÓN EN PDF */
+    #btnDescargarShared {
+        display: none !important;
+    }
+}
+
+/* Contenedor para la animación */
+#procesoMensaje {
+    display: flex;
+    align-items: center;
+    font-family: Arial, sans-serif;
+    font-size: 18px;
+    color: #333;
+}
+
+/* Espacio entre el icono y el texto */
+.loader {
+    width: 24px;
+    height: 24px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #3498db;
+    border-radius: 50%;
+    margin-right: 10px;
+    animation: spin 1.5s linear infinite;
+}
+
+/* Animación de rotación */
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Efecto de desvanecimiento para la transición */
+.hidden {
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.visible {
+    opacity: 1;
+}
+
+:root {
+    --primary-color: #1d0555;
+    --secondary-color: #010233;
+    --text-color: #2c3e50;
+    --bg-color: #f8f9fa;
+    --transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Estructura Principal Responsiva */
+.main-container {
+    padding: 1rem;
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+.form-container {
+
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+
+    /* box-shadow: 0 12px 24px rgba(0,0,0,0.08); */
+    animation: containerScale 0.6s ease;
+}
+
+@keyframes containerScale {
+    0% {
+        transform: scale(0.98);
+        opacity: 0;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Grupos de Formulario Animados */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1.2rem;
+    animation: slideIn 0.6s ease forwards;
+    opacity: 0;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(-30px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.form-group:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.form-group:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.form-group:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+/* Elementos de Formulario Mejorados */
+input,
+textarea {
+    width: 70%;
+    padding: 0.8rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    transition: var(--transition);
+    background: rgba(255, 255, 255, 0.95);
+}
+
+input:focus,
+textarea:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 15px rgba(52, 152, 219, 0.2);
+    transform: translateY(-2px);
+}
+
+textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+/* Botón Inteligente con Animación */
+.btn {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    padding: 0.8rem 2rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: var(--transition);
+    grid-column: 1 / -1;
+    justify-self: center;
+    box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: rgba(255, 255, 255, 0.1);
+    transform: rotate(45deg);
+    transition: var(--transition);
+}
+
+.btn:hover::after {
+    left: 50%;
+    top: 50%;
+}
+
+.btn:active {
+    transform: scale(0.98);
+}
+
+/* Sección de Fechas Dinámica */
+#fechasContainer {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+    margin-top: 1.2rem;
+}
+
+/* Loader Moderno */
+.loader {
+    width: 22px;
+    height: 22px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid var(--primary-color);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Mensaje de Proceso */
+#procesoMensaje {
+    text-align: center;
+    padding: 1rem;
+    background: rgba(52, 152, 219, 0.05);
+    border-radius: 8px;
+    margin-top: 1.5rem;
+    animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive Design Avanzado */
+@media (max-width: 768px) {
+    .form-container {
+        grid-template-columns: 1fr;
+        padding: 1.5rem;
+    }
+
+    .form-group {
+        margin-bottom: 1rem;
+    }
+
+    input,
+    textarea {
+        font-size: 0.9rem;
+        padding: 0.7rem;
+    }
+
+    .btn {
+        /* width: 100%; */
+        padding: 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-container {
+        padding: 0.5rem;
+    }
+
+    .form-container {
+        border-radius: 12px;
+        padding: 1rem;
+    }
+
+    #fechasContainer {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Animaciones Adicionales */
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+input:hover {
+    animation: float 3s ease-in-out infinite;
+}
+
+/* Mejoras de Accesibilidad */
+label {
+    font-size: 0.9rem;
+    color: var(--text-color);
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    font-family: Arial, sans-serif;
+    font-style: italic;
+    transition: color 0.2s ease;
+}
+
+.form-group:focus-within label {
+    color: var(--primary-color);
+}
+
+@media print {
+
+    /* Mantener bordes de tablas */
+    table,
+    th,
+    td {
+        border: 1px solid #000 !important;
+        border-collapse: collapse !important;
+    }
+
+    /* Ajustar márgenes para impresión */
+    @page {
+        margin: 0cm;
+    }
+
+    /* Ocultar botón de descarga en el PDF */
+    #btnDescargarShared {
+        display: none !important;
+    }
+
+    /* Mantener sombras y bordes del documento */
+    .page {
+        /* box-shadow: none !important; */
+        /* margin: 0 auto !important; */
+    }
+}
+
+/* RESETEO BÁSICO */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+}
+
+h1,
+h2,
+h3,
+h4,
+p {
+    margin: 0.5em 0;
+}
+
+/* CONTENEDOR DEL MAIN (Generador y Documentos) */
+.main-container {
+    display: none;
+}
+
+.btn {
+    display: inline-block;
+    margin: 10px 5px 0 0;
+    padding: 10px 20px;
+    /* background: #0066cc; */
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.btn:hover {
+    /* background: #004999; */
+}
+
+.hidden {
+    display: none;
+}
+
+/* Mensaje de proceso */
+#procesoMensaje {
+    text-align: center;
+    font-size: 18px;
+    color: #555;
+    margin-top: 20px;
+}
+
+/* BOTONES DE ACCIÓN (Ver, Descargar, Compartir, Historial) */
+.action-container {
+    width: 90%;
+    max-width: 600px;
+    margin: 20px auto;
+    text-align: center;
+}
+
+/* CONTENEDOR DEL HISTORIAL */
+.history-container {
+    width: 90%;
+    max-width: 600px;
+    margin: 20px auto;
+    background: #fff;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    display: none;
+}
+
+.history-container h2 {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.history-item {
+    border-bottom: 1px solid #ccc;
+    padding: 10px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.history-item:last-child {
+    border-bottom: none;
+}
+
+/* DOCUMENTO GENERADO (Páginas) */
+#documento {
+    display: none;
+}
+
+
+
+/* Reset Moderno */
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    /* font-family: 'Inter', system-ui, -apple-system, sans-serif; */
+}
+
+body {
+    display: flex;
+    min-height: 100vh;
+    background: #d5e4f3;
+    padding: 1rem;
+}
+
+.login-container {
+    display: flex;
+    width: 100%;
+    max-width: 900px;
+    margin: auto;
+    background: white;
+    border-radius: 1.5rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    animation: slideIn 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.login-form {
+    flex: 1;
+    padding: 6rem;
+    min-width: 400px;
+}
+
+.login-image {
+    flex: 1;
+    background: linear-gradient(45deg, #4f46e5, #6366f1);
+    position: relative;
+    overflow: hidden;
+}
+
+.login-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.9;
+}
+
+.login-image::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, rgba(79, 70, 229, 0.9), rgba(99, 102, 241, 0.2));
+}
+
+.image-content {
+    position: absolute;
+    bottom: 2rem;
+    left: 2rem;
+    z-index: 1;
+    color: white;
+}
+
+.image-content h2 {
+    font-size: 1.75rem;
+    margin-bottom: 0.5rem;
+}
+
+.image-content p {
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+.login-container h1 {
+    color: #1e293b;
+    font-size: 1.75rem;
+    font-weight: 600;
+    margin-bottom: 2.5rem;
+    text-align: center;
+}
+
+.login-container input {
+    width: 60%;
+    padding: 0.875rem 1.25rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.75rem;
+    font-size: 0.9375rem;
+    transition: all 0.2s ease;
+    /* background: #4c6d85; */
+}
+
+.login-container input:focus {
+    outline: none;
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+    background: white;
+}
+
+.btn {
+    /* width: 100%; */
+    padding: 0.875rem;
+    background: #0a0652;
+    color: white;
+    border: none;
+    border-radius: 0.75rem;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn:hover {
+    background: #040122;
+    transform: translateY(-1px);
+}
+
+@media (max-width: 768px) {
+    .login-image {
+        display: none;
+    }
+
+    .login-form {
+        min-width: auto;
+        padding: 2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .login-container {
+        border-radius: 1rem;
+    }
+
+    .login-form {
+        padding: 1.5rem;
+    }
+
+    .login-container h1 {
+        font-size: 1.5rem;
+    }
+}
+
+/* ESTILOS COMPLETOS */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+body {
+    background: #d5e4f3;
+}
+
+.login-container {
+    display: flex;
+    width: 90%;
+    max-width: 900px;
+    margin: 2rem auto;
+    background: white;
+    border-radius: 1.5rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+}
+
+.login-form {
+    flex: 1;
+    padding: 3rem;
+}
+
+.btn {
+    background: #0a0652;
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn:hover {
+    background: #040122;
+}
+
+.page {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 20px auto;
+    background: white;
+    padding: 30px;
+    border: 1px solid #000;
+}
+
+.left-column {
+    width: 48mm;
+    height: 100%;
+    background: #071e3b;
+    color: white;
+    padding: 20px;
+    float: left;
+}
+
+.right-column {
+    margin-left: 58mm;
+    padding: 20px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .login-container {
+        flex-direction: column;
+    }
+
+    .login-form {
+        padding: 2rem;
+    }
+}
+
+/* Agrega esto al final de tu archivo CSS */
+.main-container {
+    display: block !important;
+    /* Asegura que sea visible */
+}
+
+.form-container {
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fecha-input {
+    margin: 10px 0;
+}
+
+.fecha-input input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.email-form {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+}
